@@ -1,0 +1,314 @@
+{
+  "packageManager": "deb",
+  "uniqueCount": 25,
+  "vulnerabilities": [
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "gcc-14/libgcc-s1@14.2.0-19",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "gcc-14/libgomp1@14.2.0-19",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "gcc-14/libstdc++6@14.2.0-19",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "libzstd/libzstd1@1.5.7+dfsg-1",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "zlib/zlib1g@1:1.3.dfsg+really1.3.1-1+b1",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    },
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-5681058",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "low",
+      "nvdSeverity": "medium",
+      "identifiers": {
+        "CVE": [
+          "CVE-2010-4756"
+        ],
+        "CWE": [
+          "CWE-399"
+        ],
+        "ALTERNATIVE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|bkimminich/juice-shop@v20.3.0",
+        "openssl/libssl3t64@3.5.7-1~deb13u3",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "targetFile": "/juice-shop/package.json",
+      "packageManager": "npm",
+      "vulnerabilities": [
+        {
+          "id": "SNYK-JS-DECOMPRESS-20254116",
+          "name": "decompress",
+          "packageName": "decompress",
+          "version": "4.2.1",
+          "severity": "critical",
+          "nvdSeverity": null,
+          "identifiers": {
+            "CVE": [
+              "CVE-2026-101894"
+            ],
+            "CWE": [
+              "CWE-22"
+            ],
+            "GHSA": [
+              "GHSA-hrh2-vp3x-79xf"
+            ]
+          },
+          "fixedIn": [],
+          "from": [
+            "juice-shop@20.3.0",
+            "download@8.0.0",
+            "decompress@4.2.1"
+          ]
+        },
+        {
+          "id": "SNYK-JS-HBS-1566555",
+          "name": "hbs",
+          "packageName": "hbs",
+          "version": "4.3.1",
+          "severity": "low",
+          "nvdSeverity": null,
+          "identifiers": {
+            "CVE": [
+              "CVE-2021-32822"
+            ],
+            "CWE": [
+              "CWE-200"
+            ],
+            "GHSL": [
+              "GHSL-2021-020"
+            ]
+          },
+          "fixedIn": [],
+          "from": [
+            "juice-shop@20.3.0",
+            "hbs@4.3.1"
+          ]
+        },
+        {
+          "id": "npm:jsonwebtoken:20150331",
+          "name": "jsonwebtoken",
+          "packageName": "jsonwebtoken",
+          "version": "0.1.0",
+          "severity": "high",
+          "nvdSeverity": null,
+          "identifiers": {
+            "CVE": [
+              "CVE-2015-9235"
+            ],
+            "CWE": [
+              "CWE-592"
+            ],
+            "NSP": [
+              "17"
+            ],
+            "GHSA": [
+              "GHSA-c7hr-j4mj-j2w6"
+            ],
+            "ALTERNATIVE": [
+              "SNYK-JS-JSONWEBTOKEN-10037",
+              "npm:jsonwebtoken:20150331"
+            ]
+          },
+          "fixedIn": [
+            "4.2.2"
+          ],
+          "from": [
+            "juice-shop@20.3.0",
+            "express-jwt@0.1.3",
+            "jsonwebtoken@0.1.0"
+          ]
+        },
+        {
+          "id": "npm:jsonwebtoken:20150331",
+          "name": "jsonwebtoken",
+          "packageName": "jsonwebtoken",
+          "version": "0.4.0",
+          "severity": "high",
+          "nvdSeverity": null,
+          "identifiers": {
+            "CVE": [
+              "CVE-2015-9235"
+            ],
+            "CWE": [
+              "CWE-592"
+            ],
+            "NSP": [
+              "17"
+            ],
+            "GHSA": [
+              "GHSA-c7hr-j4mj-j2w6"
+            ],
+            "ALTERNATIVE": [
+              "SNYK-JS-JSONWEBTOKEN-10037",
+              "npm:jsonwebtoken:20150331"
+            ]
+          },
+          "fixedIn": [
+            "4.2.2"
+          ],
+          "from": [
+            "juice-shop@20.3.0",
+            "jsonwebtoken@0.4.0"
+          ]
+        },
+        {
+          "id": "SNYK-JS-LODASH-1018905",
+          "name": "lodash",
+          "packageName": "lodash",
+          "version": "2.4.2",
+          "severity": "medium",
+          "nvdSeverity": null,
+          "identifiers": {
+            "CVE": [
+              "CVE-2020-28500"
+            ],
+            "CWE": [
+              "CWE-400"
+            ]
+          },
+          "fixedIn": [
+            "4.17.21"
+          ],
+          "from": [
+            "juice-shop@20.3.0",
+            "sanitize-html@1.4.2",
+            "lodash@2.4.2"
+          ]
+        }
+      ]
+    }
+  ]
+}

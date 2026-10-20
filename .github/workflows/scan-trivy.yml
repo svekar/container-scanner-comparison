@@ -1,0 +1,68 @@
+# Trivy (Aqua Security): open source, no account needed.
+# https://github.com/aquasecurity/trivy-action
+name: Scan · Trivy
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+
+permissions:
+  contents: read
+
+jobs:
+  trivy:
+    name: Trivy
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image }}
+      OUT: scan-trivy
+    steps:
+      - name: Prepare output directory
+        run: mkdir -p "$OUT"
+
+      - name: Scan image
+        # trivy-action tags were hijacked in a 2026 supply-chain attack: always pin the SHA.
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ inputs.image }}
+          scanners: vuln
+          format: json
+          output: scan-trivy/trivy.json
+          exit-code: "0" # report only; gating happens in the aggregate job
+          # The action defaults to an older Trivy; pin the latest release explicitly.
+          version: v0.76.0
+
+      - name: Write metadata and summary
+        if: ${{ !cancelled() }}
+        run: |
+          status=failed
+          [[ -s $OUT/trivy.json ]] && status=ok
+          version=$(trivy --version 2>/dev/null | awk '/^Version:/ {print $2}')
+          jq -n --arg status "$status" --arg version "$version" --arg image "$IMAGE" \
+            '$ARGS.named' > "$OUT/meta.json"
+          {
+            echo "### Trivy $version: \`$IMAGE\` ($status)"
+            echo
+            echo "| Severity | Findings |"
+            echo "|---|---:|"
+            jq -r '[.Results[]?.Vulnerabilities[]?] | group_by(.Severity)[]
+                   | "| \(.[0].Severity) | \(length) |"' "$OUT/trivy.json" 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-trivy
+          path: scan-trivy/
+          retention-days: 14

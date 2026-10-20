@@ -1,0 +1,56 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Docker Scout",
+          "name": "docker scout",
+          "version": "1.26.0",
+          "rules": [
+            {
+              "id": "CVE-2099-0001",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "not fixed",
+                "affected_version": ">=0",
+                "purls": [
+                  "pkg:deb/debian/libc6@2.41-12%2Bdeb13u4?os_distro=trixie&os_name=debian&os_version=13"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-2c2c-3v3v-4w4w",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "1.0.1",
+                "affected_version": "<1.0.1",
+                "purls": [
+                  "pkg:npm/%40scope/pkg@1.0.0"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2099-0001",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability   :CVE-2099-0001  \nSeverity        :HIGH  \nPackage         :pkg:deb/debian/libc6@2.41-12%2Bdeb13u4?os_distro=trixie&os_name=debian&os_version=13  \nAffected range  :>=0  \nFixed version   :not fixed  \n"
+          }
+        },
+        {
+          "ruleId": "GHSA-2c2c-3v3v-4w4w",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability   :GHSA-2c2c-3v3v-4w4w  \nSeverity        :HIGH  \nPackage         :pkg:npm/%40scope/pkg@1.0.0  \nAffected range  :<1.0.1  \nFixed version   :1.0.1  \n"
+          }
+        }
+      ]
+    }
+  ]
+}

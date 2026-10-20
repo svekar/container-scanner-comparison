@@ -1,0 +1,9 @@
+# Local secrets for act (see .secrets.example).
+.secrets
+
+# Output of local runs (act, scripts/aggregate.sh). Anchored to the repository root
+# so the test fixtures under tests/cases/*/input/scan-*/ are not ignored.
+/artifacts/
+/report/
+/scan-*/
+/image.tar

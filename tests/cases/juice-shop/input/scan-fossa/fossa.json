@@ -1,0 +1,63 @@
+{
+  "count": 5,
+  "status": "SCANNED",
+  "issues": [
+    {
+      "cve": "CVE-2025-13465",
+      "fixedIn": "4.18.0",
+      "id": 21987832,
+      "license": null,
+      "priorityString": "medium",
+      "resolved": false,
+      "revisionId": "npm+lodash$2.4.2",
+      "rule": null,
+      "type": "vulnerability"
+    },
+    {
+      "cve": "CVE-2026-101894",
+      "fixedIn": "NO_SAFE_VERSION",
+      "id": 21987852,
+      "license": null,
+      "priorityString": "critical",
+      "resolved": false,
+      "revisionId": "npm+decompress$4.2.1",
+      "rule": null,
+      "type": "vulnerability"
+    },
+    {
+      "cve": "CVE-2015-9235",
+      "fixedIn": "9.0.0",
+      "id": 21987876,
+      "license": null,
+      "priorityString": "critical",
+      "resolved": false,
+      "revisionId": "npm+jsonwebtoken$0.4.0",
+      "rule": null,
+      "type": "vulnerability"
+    },
+    {
+      "cve": "CVE-2015-9235",
+      "fixedIn": "9.0.0",
+      "id": 21987890,
+      "license": null,
+      "priorityString": "critical",
+      "resolved": false,
+      "revisionId": "npm+jsonwebtoken$0.1.0",
+      "rule": null,
+      "type": "vulnerability"
+    },
+    {
+      "cve": null,
+      "fixedIn": null,
+      "id": 21987762,
+      "license": "CC-BY-SA-3.0",
+      "priorityString": null,
+      "resolved": false,
+      "revisionId": "deb+base-files#debian#13$amd64#0:13.8+deb13u7",
+      "rule": {
+        "ruleId": null
+      },
+      "type": "policy_conflict"
+    }
+  ]
+}

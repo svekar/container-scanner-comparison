@@ -1,0 +1,6 @@
+# zizmor configuration (https://docs.zizmor.sh/configuration/).
+rules:
+  # zizmor suggests GitHub's `$/...` syntax for same-repository reusable workflows,
+  # but actionlint (v1.7.12) rejects it. Keep `./...` until actionlint supports it.
+  self-repository:
+    disable: true

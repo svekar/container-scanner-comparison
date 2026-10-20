@@ -1,0 +1,80 @@
+# OSV-Scanner (Google): open source, no account needed. Uses the OSV.dev database.
+# https://github.com/google/osv-scanner-action
+name: Scan · OSV-Scanner
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+
+permissions:
+  contents: read
+
+jobs:
+  osv:
+    name: OSV-Scanner
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image }}
+      OUT: scan-osv
+    steps:
+      # The action runs in its own container without a Docker daemon,
+      # so hand it the image as an archive.
+      - name: Export image
+        run: |
+          mkdir -p "$OUT"
+          docker pull "$IMAGE"
+          docker save -o image.tar "$IMAGE"
+
+      - name: Scan image
+        # Exits 1 when vulnerabilities are found; gating happens in the aggregate job.
+        continue-on-error: true
+        uses: google/osv-scanner-action/osv-scanner-action@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
+        with:
+          scan-args: |-
+            scan
+            image
+            --format=json
+            --output=scan-osv/osv.json
+            --archive
+            ./image.tar
+
+      - name: Write metadata and summary
+        if: ${{ !cancelled() }}
+        run: |
+          status=failed
+          [[ -s $OUT/osv.json ]] && status=ok
+          # The scanner runs inside the action's container and its JSON has no version, so
+          # leave it out rather than hard-code one that Dependabot bumps won't update.
+          jq -n --arg status "$status" --arg image "$IMAGE" '$ARGS.named' > "$OUT/meta.json"
+          {
+            echo "### OSV-Scanner: \`$IMAGE\` ($status)"
+            echo
+            # OSV reports Debian advisories (DSA/DLA) that each fix several CVEs. These
+            # advisories carry no severity, so count CVEs and affected binary packages instead.
+            echo "| CVEs | Advisories without a CVE | Advisories (DSA/DLA) | Affected binary packages |"
+            echo "|---:|---:|---:|---:|"
+            jq -r '[.results[]?.packages[]?] as $pk
+                   | [$pk[].groups[]?] as $g
+                   | [$g[] | (.aliases // []) + .ids | .[] | select(startswith("CVE-"))] as $cves
+                   | [$g[] | select([(.aliases // []) + .ids | .[] | select(test("CVE-"))] | length == 0) | .ids[0]] as $nocve
+                   | "| \($cves | unique | length) | \($nocve | unique | length) | \([$g[].ids[0]] | unique | length) | \($pk | length) |"' \
+              "$OUT/osv.json" 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-osv
+          path: scan-osv/
+          retention-days: 14

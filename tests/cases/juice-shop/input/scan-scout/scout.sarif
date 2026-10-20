@@ -1,0 +1,131 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Docker Scout",
+          "informationUri": "https://docker.com/products/docker-scout",
+          "name": "docker scout",
+          "rules": [
+            {
+              "id": "GMS-2015-4",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "UNSPECIFIED",
+                "fixed_version": "4.2.2",
+                "affected_version": "<4.2.2",
+                "purls": [
+                  "pkg:npm/jsonwebtoken@0.1.0",
+                  "pkg:npm/jsonwebtoken@0.4.0"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2021-32822",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "MEDIUM",
+                "fixed_version": "not fixed",
+                "affected_version": ">=0",
+                "purls": [
+                  "pkg:npm/hbs@4.3.1"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2020-8203",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "4.17.20",
+                "affected_version": "<4.17.20",
+                "purls": [
+                  "pkg:npm/lodash@2.4.2"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2015-9235",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "CRITICAL",
+                "fixed_version": "4.2.2",
+                "affected_version": "<4.2.2",
+                "purls": [
+                  "pkg:npm/jsonwebtoken@0.1.0",
+                  "pkg:npm/jsonwebtoken@0.4.0"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-101894",
+              "name": "OsPackageVulnerability",
+              "properties": {
+                "cvssV3_severity": "CRITICAL",
+                "fixed_version": "not fixed",
+                "affected_version": "<=4.2.1",
+                "purls": [
+                  "pkg:npm/decompress@4.2.1"
+                ]
+              }
+            }
+          ],
+          "version": "1.25.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "GMS-2015-4",
+          "level": "none",
+          "message": {
+            "text": "Vulnerability   :GMS-2015-4                  \nSeverity        :UNSPECIFIED                 \nPackage         :pkg:npm/jsonwebtoken@0.1.0  \nAffected range  :<4.2.2                      \nFixed version   :4.2.2                       \n"
+          }
+        },
+        {
+          "ruleId": "GMS-2015-4",
+          "level": "none",
+          "message": {
+            "text": "Vulnerability   :GMS-2015-4                  \nSeverity        :UNSPECIFIED                 \nPackage         :pkg:npm/jsonwebtoken@0.4.0  \nAffected range  :<4.2.2                      \nFixed version   :4.2.2                       \n"
+          }
+        },
+        {
+          "ruleId": "CVE-2021-32822",
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability    :CVE-2021-32822                                \nSeverity         :MEDIUM                                        \nPackage          :pkg:npm/hbs@4.3.1                             \nAffected range   :>=0                                           \nFixed version    :not fixed                                     \nCVSS Score       :5.3                                           \nCVSS Vector      :CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N  \nEPSS Score       :0.011780                                      \nEPSS Percentile  :0.671790                                      \n"
+          }
+        },
+        {
+          "ruleId": "CVE-2020-8203",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2020-8203                                 \nSeverity         :HIGH                                          \nPackage          :pkg:npm/lodash@2.4.2                          \nAffected range   :<4.17.20                                      \nFixed version    :4.17.20                                       \nCVSS Score       :7.4                                           \nCVSS Vector      :CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H  \nEPSS Score       :0.052130                                      \nEPSS Percentile  :0.924150                                      \n"
+          }
+        },
+        {
+          "ruleId": "CVE-2015-9235",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2015-9235               \nSeverity         :CRITICAL                    \nPackage          :pkg:npm/jsonwebtoken@0.1.0  \nAffected range   :<4.2.2                      \nFixed version    :4.2.2                       \nEPSS Score       :0.085240                    \nEPSS Percentile  :0.950030                    \n"
+          }
+        },
+        {
+          "ruleId": "CVE-2015-9235",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2015-9235               \nSeverity         :CRITICAL                    \nPackage          :pkg:npm/jsonwebtoken@0.4.0  \nAffected range   :<4.2.2                      \nFixed version    :4.2.2                       \nEPSS Score       :0.085240                    \nEPSS Percentile  :0.950030                    \n"
+          }
+        },
+        {
+          "ruleId": "CVE-2026-101894",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-101894                               \nSeverity         :CRITICAL                                      \nPackage          :pkg:npm/decompress@4.2.1                      \nAffected range   :<=4.2.1                                       \nFixed version    :not fixed                                     \nCVSS Score       :9.1                                           \nCVSS Vector      :CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N  \nEPSS Score       :0.008140                                      \nEPSS Percentile  :0.562820                                      \n"
+          }
+        }
+      ]
+    }
+  ]
+}

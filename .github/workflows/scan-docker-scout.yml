@@ -1,0 +1,90 @@
+# Docker Scout: needs a (free) Docker Hub account.
+# Secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN (personal access token, read-only is enough).
+# https://github.com/docker/scout-action
+name: Scan · Docker Scout
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: false
+      DOCKERHUB_TOKEN:
+        required: false
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+
+permissions:
+  contents: read
+
+jobs:
+  scout:
+    name: Docker Scout
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image }}
+      OUT: scan-scout
+    steps:
+      # Secrets can't be used in `if:` directly, so expose whether they are set.
+      - name: Check credentials
+        id: creds
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          mkdir -p "$OUT"
+          if [[ -n $DOCKERHUB_USERNAME && -n $DOCKERHUB_TOKEN ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::DOCKERHUB_USERNAME/DOCKERHUB_TOKEN not set, skipping Docker Scout"
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Log in to Docker Hub
+        if: steps.creds.outputs.enabled == 'true'
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Scan image
+        if: steps.creds.outputs.enabled == 'true'
+        uses: docker/scout-action@221e7f4860634eeb1579e3bd7ca232e577bd1864 # v1.26.0
+        with:
+          command: cves
+          image: ${{ inputs.image }}
+          sarif-file: scan-scout/scout.sarif
+          summary: true        # Scout writes its own job summary
+          write-comment: false # the aggregate job owns the PR comment
+
+      - name: Write metadata
+        if: ${{ !cancelled() }}
+        env:
+          ENABLED: ${{ steps.creds.outputs.enabled }}
+        run: |
+          if [[ $ENABLED != true ]]; then
+            status=skipped reason="no Docker Hub credentials"
+          elif [[ -s $OUT/scout.sarif ]]; then
+            status=ok reason=""
+          else
+            status=failed reason="no SARIF output"
+          fi
+          version=$(jq -r '.runs[0].tool.driver.version // ""' "$OUT/scout.sarif" 2>/dev/null || true)
+          jq -n --arg status "$status" --arg reason "$reason" --arg version "$version" \
+            --arg image "$IMAGE" '$ARGS.named' > "$OUT/meta.json"
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-scout
+          path: scan-scout/
+          retention-days: 14

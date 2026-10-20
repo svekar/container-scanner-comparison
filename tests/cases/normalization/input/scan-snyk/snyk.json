@@ -1,0 +1,69 @@
+{
+  "packageManager": "deb",
+  "uniqueCount": 3,
+  "vulnerabilities": [
+    {
+      "id": "SNYK-DEBIAN13-GLIBC-1000001",
+      "name": "glibc/libc6",
+      "packageName": "glibc",
+      "version": "2.41-12+deb13u4",
+      "severity": "high",
+      "identifiers": {
+        "CVE": [
+          "CVE-2099-0001"
+        ],
+        "CWE": []
+      },
+      "fixedIn": [],
+      "from": [
+        "docker-image|test/image@1",
+        "glibc/libc6@2.41-12+deb13u4"
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "packageManager": "npm",
+      "targetFile": "/app/package.json",
+      "vulnerabilities": [
+        {
+          "id": "SNYK-JS-SCOPEPKG-1000002",
+          "name": "@scope/pkg",
+          "packageName": "@scope/pkg",
+          "version": "1.0.0",
+          "severity": "high",
+          "identifiers": {
+            "CVE": [],
+            "CWE": [
+              "CWE-79"
+            ],
+            "GHSA": [
+              "GHSA-2c2c-3v3v-4w4w"
+            ]
+          },
+          "fixedIn": [
+            "1.0.1"
+          ],
+          "from": [
+            "app@1.0.0",
+            "@scope/pkg@1.0.0"
+          ]
+        },
+        {
+          "id": "snyk:lic:npm:left-pad:WTFPL",
+          "type": "license",
+          "license": "WTFPL",
+          "name": "left-pad",
+          "packageName": "left-pad",
+          "version": "1.3.0",
+          "severity": "high",
+          "fixedIn": [],
+          "from": [
+            "app@1.0.0",
+            "left-pad@1.3.0"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+# Lints, format-checks and tests the shell scripts in this repository.
+name: Shell
+
+on:
+  push:
+    paths:
+      - "**.sh"
+      - tests/**
+      - .editorconfig
+      - .github/workflows/shell.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: ShellCheck and shfmt
+    runs-on: ubuntu-latest
+    env:
+      SHFMT_VERSION: v3.14.1
+      # sha256 of shfmt_v3.14.1_linux_amd64, as published in the GitHub release.
+      SHFMT_SHA256: 76e77641faa025814b77f153b29796b8e6fa2fca03e0c76a691608b86c7ea7bf
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # ShellCheck is preinstalled on GitHub-hosted runners; it is the same binary
+      # actionlint uses for `run:` blocks.
+      - name: ShellCheck
+        run: |
+          shellcheck --version
+          git ls-files -z '*.sh' | xargs -0 shellcheck
+
+      - name: Install shfmt
+        run: |
+          bin="$RUNNER_TEMP/bin"
+          mkdir -p "$bin"
+          curl -sSfL -o "$bin/shfmt" \
+            "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_amd64"
+          echo "${SHFMT_SHA256}  $bin/shfmt" | sha256sum --check --strict
+          chmod +x "$bin/shfmt"
+          echo "$bin" >> "$GITHUB_PATH"
+
+      # Formatting follows Google's shell style guide; the shfmt options
+      # (`-i 2 -ci -bn`) come from .editorconfig. Fix locally with `shfmt -w .`.
+      - name: shfmt
+        run: git ls-files -z '*.sh' | xargs -0 shfmt --diff
+
+  test:
+    name: Aggregator tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run tests
+        run: |
+          jq --version
+          tests/run.sh
