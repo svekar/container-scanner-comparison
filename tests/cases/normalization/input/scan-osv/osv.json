@@ -1,0 +1,209 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "/github/workspace/image.tar",
+        "type": "docker"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "glibc",
+            "os_package_name": "libc6",
+            "version": "2.41-12+deb13u4",
+            "ecosystem": "Debian:13",
+            "purl": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u4?arch=amd64&distro=13&source=glibc"
+          },
+          "vulnerabilities": [
+            {
+              "id": "DEBIAN-CVE-2099-0001",
+              "aliases": null,
+              "affected": [
+                {
+                  "package": {
+                    "name": "glibc",
+                    "ecosystem": "Debian:12"
+                  },
+                  "ranges": [
+                    {
+                      "type": "ECOSYSTEM",
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "2.36-9+deb12u99"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "glibc",
+                    "ecosystem": "Debian:13"
+                  },
+                  "ranges": [
+                    {
+                      "type": "ECOSYSTEM",
+                      "events": [
+                        {
+                          "introduced": "0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "groups": [
+            {
+              "ids": [
+                "DEBIAN-CVE-2099-0001"
+              ],
+              "aliases": [
+                "CVE-2099-0001",
+                "DEBIAN-CVE-2099-0001"
+              ],
+              "max_severity": "7.8"
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "@scope/pkg",
+            "version": "1.0.0",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/%40scope/pkg@1.0.0?source=PUBLIC_REGISTRY"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-2c2c-3v3v-4w4w",
+              "aliases": null,
+              "affected": [
+                {
+                  "package": {
+                    "name": "@scope/pkg",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "1.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "groups": [
+            {
+              "ids": [
+                "GHSA-2c2c-3v3v-4w4w"
+              ],
+              "aliases": [
+                "GHSA-2c2c-3v3v-4w4w"
+              ],
+              "max_severity": "7.5"
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "uuid",
+            "version": "12.0.0",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/uuid@12.0.0?source=PUBLIC_REGISTRY"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-3x3x-4c4c-5f5f",
+              "aliases": [
+                "CVE-2099-0002"
+              ],
+              "affected": [
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "11.1.1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        {
+                          "introduced": "12.0.0"
+                        },
+                        {
+                          "fixed": "12.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        {
+                          "introduced": "13.0.0"
+                        },
+                        {
+                          "fixed": "13.0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "groups": [
+            {
+              "ids": [
+                "GHSA-3x3x-4c4c-5f5f"
+              ],
+              "aliases": [
+                "CVE-2099-0002",
+                "GHSA-3x3x-4c4c-5f5f"
+              ],
+              "max_severity": "7.5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

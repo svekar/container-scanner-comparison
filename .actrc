@@ -1,0 +1,7 @@
+# Defaults for running the workflows locally with act (https://github.com/nektos/act).
+# Medium-size runner image with docker CLI, jq and bash, close enough to ubuntu-latest.
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+# Local artifact server so upload/download-artifact work between jobs.
+--artifact-server-path=/tmp/act-artifacts
+# Secrets file (copy .secrets.example to .secrets; it is git-ignored).
+--secret-file=.secrets

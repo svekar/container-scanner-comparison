@@ -1,0 +1,411 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "/juice-shop/node_modules/.package-lock.json",
+        "type": "artifact"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "decompress",
+            "version": "4.2.1",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/decompress@4.2.1?source=PUBLIC_REGISTRY",
+            "image_origin_details": {
+              "index": 26
+            }
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-hrh2-vp3x-79xf"
+              ],
+              "aliases": [
+                "CVE-2026-101894",
+                "GHSA-hrh2-vp3x-79xf"
+              ],
+              "max_severity": "9.1"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-hrh2-vp3x-79xf",
+              "aliases": [
+                "CVE-2026-101894"
+              ],
+              "severity": [
+                {
+                  "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+                  "type": "CVSS_V3"
+                }
+              ],
+              "affected": [
+                {
+                  "package": {
+                    "name": "@xhmikosr/decompress",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "11.0.0"
+                        },
+                        {
+                          "fixed": "11.1.4"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "@xhmikosr/decompress",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "10.2.2"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "decompress",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "last_affected": "4.2.1"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "jsonwebtoken",
+            "version": "0.1.0",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/jsonwebtoken@0.1.0?source=PUBLIC_REGISTRY",
+            "image_origin_details": {
+              "index": 26
+            }
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-c7hr-j4mj-j2w6"
+              ],
+              "aliases": [
+                "CVE-2015-9235",
+                "GHSA-c7hr-j4mj-j2w6"
+              ],
+              "max_severity": ""
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-c7hr-j4mj-j2w6",
+              "aliases": [
+                "CVE-2015-9235"
+              ],
+              "severity": null,
+              "affected": [
+                {
+                  "package": {
+                    "name": "jsonwebtoken",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "4.2.2"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "jsonwebtoken",
+            "version": "0.4.0",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/jsonwebtoken@0.4.0?source=PUBLIC_REGISTRY",
+            "image_origin_details": {
+              "index": 26
+            }
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-c7hr-j4mj-j2w6"
+              ],
+              "aliases": [
+                "CVE-2015-9235",
+                "GHSA-c7hr-j4mj-j2w6"
+              ],
+              "max_severity": ""
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-c7hr-j4mj-j2w6",
+              "aliases": [
+                "CVE-2015-9235"
+              ],
+              "severity": null,
+              "affected": [
+                {
+                  "package": {
+                    "name": "jsonwebtoken",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "4.2.2"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "uuid",
+            "version": "8.3.2",
+            "ecosystem": "npm",
+            "purl": "pkg:npm/uuid@8.3.2?source=PUBLIC_REGISTRY",
+            "image_origin_details": {
+              "index": 26
+            }
+          },
+          "groups": [
+            {
+              "ids": [
+                "GHSA-w5hq-g745-h8pq"
+              ],
+              "aliases": [
+                "CVE-2026-41907",
+                "CVE-2026-41988",
+                "GHSA-w5hq-g745-h8pq"
+              ],
+              "max_severity": "7.5"
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "GHSA-w5hq-g745-h8pq",
+              "aliases": [
+                "CVE-2026-41907",
+                "CVE-2026-41988"
+              ],
+              "severity": [
+                {
+                  "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+                  "type": "CVSS_V3"
+                },
+                {
+                  "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+                  "type": "CVSS_V4"
+                }
+              ],
+              "affected": [
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        },
+                        {
+                          "fixed": "11.1.1"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "12.0.0"
+                        },
+                        {
+                          "fixed": "12.0.1"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "uuid",
+                    "ecosystem": "npm"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "13.0.0"
+                        },
+                        {
+                          "fixed": "13.0.1"
+                        }
+                      ],
+                      "type": "SEMVER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": {
+        "path": "/var/lib/dpkg/status.d/libc6",
+        "type": "os"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "glibc",
+            "os_package_name": "libc6",
+            "version": "2.41-12+deb13u4",
+            "ecosystem": "Debian:13",
+            "purl": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u4?arch=amd64&distro=13&source=glibc",
+            "image_origin_details": {
+              "index": 13
+            }
+          },
+          "groups": [
+            {
+              "ids": [
+                "DEBIAN-CVE-2010-4756"
+              ],
+              "aliases": [
+                "CVE-2010-4756",
+                "DEBIAN-CVE-2010-4756"
+              ],
+              "experimental_analysis": {
+                "DEBIAN-CVE-2010-4756": {
+                  "called": true,
+                  "unimportant": true
+                }
+              },
+              "max_severity": ""
+            }
+          ],
+          "vulnerabilities": [
+            {
+              "id": "DEBIAN-CVE-2010-4756",
+              "aliases": null,
+              "severity": null,
+              "affected": [
+                {
+                  "package": {
+                    "name": "glibc",
+                    "ecosystem": "Debian:12"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        }
+                      ],
+                      "type": "ECOSYSTEM"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "glibc",
+                    "ecosystem": "Debian:13"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        }
+                      ],
+                      "type": "ECOSYSTEM"
+                    }
+                  ]
+                },
+                {
+                  "package": {
+                    "name": "glibc",
+                    "ecosystem": "Debian:14"
+                  },
+                  "ranges": [
+                    {
+                      "events": [
+                        {
+                          "introduced": "0"
+                        }
+                      ],
+                      "type": "ECOSYSTEM"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

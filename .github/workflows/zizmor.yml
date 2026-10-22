@@ -1,0 +1,28 @@
+# Security linting of GitHub Actions workflows with zizmor (https://docs.zizmor.sh).
+# Configuration: .github/zizmor.yml
+name: zizmor
+
+on:
+  push:
+    paths:
+      - .github/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zizmor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
+        with:
+          # The repository is private without GitHub Advanced Security, so don't
+          # upload SARIF to code scanning; report in the log and as annotations.
+          advanced-security: false
+          annotations: true

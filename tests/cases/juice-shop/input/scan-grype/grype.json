@@ -1,0 +1,112 @@
+{
+  "descriptor": {
+    "version": "0.121.0"
+  },
+  "source": {
+    "target": {
+      "repoDigests": [
+        "bkimminich/juice-shop@sha256:cea5a4af4aacee498c491491af0408934ec81d004035c0a02ef3e54395e3bf27"
+      ]
+    }
+  },
+  "matches": [
+    {
+      "vulnerability": {
+        "id": "GHSA-c7hr-j4mj-j2w6",
+        "severity": "Critical",
+        "fix": {
+          "versions": [
+            "4.2.2"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "4.2.2",
+              "date": "2020-07-28",
+              "kind": "first-observed"
+            }
+          ]
+        }
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2015-9235"
+        }
+      ],
+      "artifact": {
+        "name": "jsonwebtoken",
+        "version": "0.1.0",
+        "type": "npm"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "GHSA-c7hr-j4mj-j2w6",
+        "severity": "Critical",
+        "fix": {
+          "versions": [
+            "4.2.2"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "4.2.2",
+              "date": "2020-07-28",
+              "kind": "first-observed"
+            }
+          ]
+        }
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2015-9235"
+        }
+      ],
+      "artifact": {
+        "name": "jsonwebtoken",
+        "version": "0.4.0",
+        "type": "npm"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "GHSA-hrh2-vp3x-79xf",
+        "severity": "Critical",
+        "fix": {
+          "versions": [],
+          "state": "not-fixed"
+        }
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2026-101894"
+        }
+      ],
+      "artifact": {
+        "name": "decompress",
+        "version": "4.2.1",
+        "type": "npm"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2010-4756",
+        "severity": "Negligible",
+        "fix": {
+          "versions": [],
+          "state": "not-fixed"
+        }
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2010-4756"
+        }
+      ],
+      "artifact": {
+        "name": "libc6",
+        "version": "2.41-12+deb13u4",
+        "type": "deb"
+      }
+    }
+  ]
+}

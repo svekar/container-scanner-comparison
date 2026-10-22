@@ -1,0 +1,96 @@
+# Snyk Container: needs a Snyk account (the free plan has a monthly test quota).
+# Secret: SNYK_TOKEN (Account settings → Auth Token, or a service account token).
+# https://github.com/snyk/actions/tree/master/docker
+name: Scan · Snyk
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+    secrets:
+      SNYK_TOKEN:
+        required: false
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+
+permissions:
+  contents: read
+
+jobs:
+  snyk:
+    name: Snyk
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image }}
+      OUT: scan-snyk
+    steps:
+      - name: Check credentials
+        id: creds
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          mkdir -p "$OUT"
+          if [[ -n $SNYK_TOKEN ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::SNYK_TOKEN not set, skipping Snyk"
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Scan image
+        if: steps.creds.outputs.enabled == 'true'
+        # Exits 1 when vulnerabilities are found; gating happens in the aggregate job.
+        continue-on-error: true
+        # snyk/actions publishes no maintained release tags; pin a master commit.
+        uses: snyk/actions/docker@11b673cfb4b0dc0d860a1323caa199d54950dcce # master 2026-10
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ inputs.image }}
+          args: --json-file-output=scan-snyk/snyk.json
+          sarif: false
+
+      - name: Write metadata and summary
+        if: ${{ !cancelled() }}
+        env:
+          ENABLED: ${{ steps.creds.outputs.enabled }}
+        run: |
+          if [[ $ENABLED != true ]]; then
+            status=skipped reason="no SNYK_TOKEN"
+          elif [[ -s $OUT/snyk.json ]] && jq -e '(if type == "array" then .[0] else . end) | has("vulnerabilities")' "$OUT/snyk.json" >/dev/null; then
+            status=ok reason=""
+          else
+            status=failed reason="$(jq -r '(if type == "array" then .[0] else . end) | .error // "no JSON output"' "$OUT/snyk.json" 2>/dev/null || echo "no JSON output")"
+          fi
+          jq -n --arg status "$status" --arg reason "$reason" --arg image "$IMAGE" \
+            '$ARGS.named' > "$OUT/meta.json"
+          # Intentional: skip the summary unless status is ok, and never fail the step over it.
+          # shellcheck disable=SC2015
+          [[ $status == ok ]] && {
+            echo "### Snyk: \`$IMAGE\`"
+            echo
+            # Snyk lists each issue once per dependency path, OS packages at the top level and
+            # app projects (npm, ...) under .applications[]. Count unique issues, and
+            # (issue, binary package) pairs to compare with Trivy and Grype.
+            echo "| Severity (Snyk) | Issues | Issue × binary package |"
+            echo "|---|---:|---:|"
+            jq -r '[(if type == "array" then .[] else . end) | (., .applications[]?) | .vulnerabilities[]?]
+                   | group_by(.severity)[]
+                   | "| \(.[0].severity) | \(map(.id) | unique | length) | \(map([.id, .name]) | unique | length) |"' \
+              "$OUT/snyk.json"
+          } >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-snyk
+          path: scan-snyk/
+          retention-days: 14

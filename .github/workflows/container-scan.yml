@@ -1,0 +1,165 @@
+# Runs every scanner in parallel against one image, then aggregates the results into a
+# single Markdown comparison report:
+#   - written to the run's job summary
+#   - uploaded as the `scan-report` artifact (report + findings.json/csv)
+#   - posted as a PR comment that is updated on every run
+name: Container scan
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # Defaults defer to the repository variables, so a manual run without changes scans
+  # the same image with the same gate as push and pull_request runs.
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan (empty = SCAN_IMAGE variable, else bkimminich/juice-shop:v20.3.0)
+        type: string
+        default: ""
+      fail-on:
+        description: Fail the run if any tool reports a vulnerability at or above this severity (default = SCAN_FAIL_ON variable, else none)
+        type: choice
+        options: [default, none, critical, high, medium, low]
+        default: default
+
+permissions:
+  contents: read
+
+concurrency:
+  group: container-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  config:
+    name: Configure
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.config.outputs.image }}
+      fail-on: ${{ steps.config.outputs.fail-on }}
+    steps:
+      - name: Resolve configuration
+        id: config
+        env:
+          INPUT_IMAGE: ${{ inputs.image }}
+          VAR_IMAGE: ${{ vars.SCAN_IMAGE }}
+          INPUT_FAIL_ON: ${{ inputs.fail-on }}
+          VAR_FAIL_ON: ${{ vars.SCAN_FAIL_ON }}
+        run: |
+          # Precedence: manual input → repository variable → default.
+          # The inputs are empty on push and pull_request runs.
+          image=${INPUT_IMAGE:-${VAR_IMAGE:-bkimminich/juice-shop:v20.3.0}}
+          fail_on=$INPUT_FAIL_ON
+          [[ $fail_on == default ]] && fail_on=""
+          fail_on=${fail_on:-${VAR_FAIL_ON:-none}}
+          fail_on=${fail_on,,}
+          # Check before scanning: a typo must not silently turn the gate off.
+          case $fail_on in
+            none | critical | high | medium | low) ;;
+            *)
+              echo "::error::SCAN_FAIL_ON must be none, critical, high, medium or low, not '$fail_on'"
+              exit 1
+              ;;
+          esac
+          echo "Scanning $image (fail-on $fail_on)"
+          {
+            echo "image=$image"
+            echo "fail-on=$fail_on"
+          } >> "$GITHUB_OUTPUT"
+
+  trivy:
+    needs: config
+    uses: ./.github/workflows/scan-trivy.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+
+  grype:
+    needs: config
+    uses: ./.github/workflows/scan-grype.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+
+  scout:
+    needs: config
+    uses: ./.github/workflows/scan-docker-scout.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  osv:
+    needs: config
+    uses: ./.github/workflows/scan-osv.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+
+  snyk:
+    needs: config
+    uses: ./.github/workflows/scan-snyk.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  fossa:
+    needs: config
+    uses: ./.github/workflows/scan-fossa.yml
+    with:
+      image: ${{ needs.config.outputs.image }}
+    secrets:
+      FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+
+  report:
+    name: Aggregate report
+    needs: [config, trivy, grype, scout, osv, snyk, fossa]
+    # Report whatever finished, even if some scanners failed.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # PR comment
+    env:
+      SCAN_IMAGE: ${{ needs.config.outputs.image }}
+      FAIL_ON: ${{ needs.config.outputs.fail-on }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Download scan results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: scan-*
+          path: artifacts
+
+      - name: Build report
+        id: aggregate
+        run: |
+          scripts/aggregate.sh --in artifacts --out report --image "$SCAN_IMAGE" --fail-on "$FAIL_ON"
+          cat report/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-report
+          path: report/
+          retention-days: 30
+
+      - name: Comment on pull request
+        if: github.event_name == 'pull_request'
+        # PRs from forks get a read-only token; don't fail the run over the comment.
+        continue-on-error: true
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          header: container-scan
+          path: report/report-comment.md
+
+      - name: Severity gate
+        if: steps.aggregate.outputs.gate == 'fail'
+        env:
+          REASON: ${{ steps.aggregate.outputs.gate-reason }}
+        run: |
+          echo "::error::Gate (fail-on $FAIL_ON) failed: $REASON"
+          exit 1

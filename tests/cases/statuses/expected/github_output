@@ -1,0 +1,2 @@
+gate=fail
+gate-reason=no results from Trivy, Grype, OSV-Scanner, Snyk

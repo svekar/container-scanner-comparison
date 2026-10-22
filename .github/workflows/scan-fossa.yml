@@ -1,0 +1,97 @@
+# FOSSA container scanning: needs a FOSSA account (a free tier is available).
+# Secret: FOSSA_API_KEY (Settings → Integrations → API, a push-only key is NOT enough
+# because `fossa container test` reads results back).
+# https://github.com/fossas/fossa-action
+name: Scan · FOSSA
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+    secrets:
+      FOSSA_API_KEY:
+        required: false
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Image to scan
+        type: string
+        default: bkimminich/juice-shop:v20.3.0
+
+permissions:
+  contents: read
+
+jobs:
+  fossa:
+    name: FOSSA
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image }}
+      OUT: scan-fossa
+    steps:
+      - name: Check credentials
+        id: creds
+        env:
+          FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+        run: |
+          mkdir -p "$OUT"
+          if [[ -n $FOSSA_API_KEY ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::FOSSA_API_KEY not set, skipping FOSSA"
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Runs `fossa container analyze` and uploads the result to FOSSA.
+      - name: Analyze image
+        if: steps.creds.outputs.enabled == 'true'
+        uses: fossas/fossa-action@29693cc50323968e039056be419b32989fc5880c # v2.0.0
+        with:
+          api-key: ${{ secrets.FOSSA_API_KEY }}
+          container: ${{ inputs.image }}
+
+      # The action puts the fossa CLI on PATH; use it to fetch the issues as JSON.
+      - name: Fetch issues as JSON
+        if: steps.creds.outputs.enabled == 'true'
+        env:
+          FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+        run: |
+          # Exits non-zero when issues are found; gating happens in the aggregate job.
+          # Keep stderr so a failure can be diagnosed from the artifact.
+          fossa container test "$IMAGE" --format json > "$OUT/fossa.json" 2> "$OUT/fossa.log" || true
+          cat "$OUT/fossa.log" >&2
+          # With 0 issues FOSSA only logs "Test passed!" and prints no JSON.
+          if [[ ! -s $OUT/fossa.json ]] && grep -q "Test passed" "$OUT/fossa.log"; then
+            echo '{"count": 0, "issues": []}' > "$OUT/fossa.json"
+          fi
+
+      - name: Write metadata
+        if: ${{ !cancelled() }}
+        env:
+          ENABLED: ${{ steps.creds.outputs.enabled }}
+        run: |
+          if [[ $ENABLED != true ]]; then
+            status=skipped reason="no FOSSA_API_KEY"
+          elif jq -e . "$OUT/fossa.json" >/dev/null 2>&1; then
+            status=ok reason=""
+          elif grep -qi "push-only" "$OUT/fossa.log" 2>/dev/null; then
+            # FOSSA hides issue details from push-only keys and prints no JSON.
+            status=failed reason="FOSSA_API_KEY is push-only; issue details need a full-access key"
+          else
+            status=failed
+            reason="no JSON output: $(grep -v '^\s*$' "$OUT/fossa.log" 2>/dev/null | tail -1 | cut -c1-200)"
+          fi
+          version=$(fossa --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
+          jq -n --arg status "$status" --arg reason "$reason" --arg version "$version" \
+            --arg image "$IMAGE" '$ARGS.named' > "$OUT/meta.json"
+
+      - name: Upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scan-fossa
+          path: scan-fossa/
+          retention-days: 14
