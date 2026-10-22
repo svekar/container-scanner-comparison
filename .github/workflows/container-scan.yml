@@ -156,6 +156,21 @@ jobs:
           header: container-scan
           path: report/report-comment.md
 
+      # Dependabot PRs get Dependabot secrets instead of the repository's. Without them the
+      # account-based tools are skipped, and a bump of their actions would merge untested.
+      - name: Check tool coverage on Dependabot PRs
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        run: |
+          jq -r '.tools[]
+                 | if .status == "failed" or .status == "missing" then
+                     "::error::\(.name) \(.status): \(.reason)"
+                   elif .status == "skipped" then
+                     "::warning::\(.name) skipped: \(.reason). Set its secrets with `gh secret set NAME --app dependabot`."
+                   else empty end' report/findings.json
+          if jq -e 'any(.tools[]; .status == "failed" or .status == "missing")' report/findings.json >/dev/null; then
+            exit 1
+          fi
+
       - name: Severity gate
         if: steps.aggregate.outputs.gate == 'fail'
         env:

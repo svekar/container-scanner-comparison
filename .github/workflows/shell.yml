@@ -1,13 +1,12 @@
 # Lints, format-checks and tests the shell scripts in this repository.
 name: Shell
 
+# Required checks for merging into main, so no `paths:` filter: a required check that a
+# filter skips stays pending and blocks the pull request.
 on:
+  pull_request:
   push:
-    paths:
-      - "**.sh"
-      - tests/**
-      - .editorconfig
-      - .github/workflows/shell.yml
+    branches: [main]
   workflow_dispatch:
 
 permissions:

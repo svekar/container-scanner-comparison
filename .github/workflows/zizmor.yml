@@ -2,10 +2,12 @@
 # Configuration: .github/zizmor.yml
 name: zizmor
 
+# Required check for merging into main, so no `paths:` filter: a required check that a
+# filter skips stays pending and blocks the pull request.
 on:
+  pull_request:
   push:
-    paths:
-      - .github/**
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -14,15 +16,16 @@ permissions:
 jobs:
   zizmor:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # upload SARIF to code scanning
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
+      # Uploads the findings to code scanning (free for public repositories): they show up
+      # in the Security tab and on the pull request. In this mode the job doesn't fail on
+      # findings; the ruleset's code scanning rule blocks the merge instead.
       - name: Run zizmor
         uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
-        with:
-          # The repository is private without GitHub Advanced Security, so don't
-          # upload SARIF to code scanning; report in the log and as annotations.
-          advanced-security: false
-          annotations: true
