@@ -29,6 +29,12 @@ The repo has two goals:
 
 Tools whose secrets are missing don't fail: their job shows a notice, and the report lists them as **skipped**.
 
+Pull requests from forks get no secrets, so those tools are always skipped there.
+Dependabot pull requests get *Dependabot* secrets, not the repository's. Add the same secrets
+for Dependabot so that action bumps get tested (`gh secret set NAME --app dependabot`). On
+Dependabot pull requests, the report job fails if a tool failed or left no artifact, and
+warns about skipped tools.
+
 ### Tools considered but not included
 
 - **Checkov** can only scan image packages for CVEs with a Prisma Cloud API key
@@ -121,12 +127,13 @@ didn't run found nothing. Tools that are skipped because their secrets aren't se
 
 ## Quality checks
 
-These workflows run on pushes that touch the relevant files:
+These workflows run on every pull request and push to `main`. Their jobs, plus the container
+scan's **Aggregate report**, are required checks for merging into `main`:
 
 | Workflow | What it checks |
 |---|---|
 | [`actionlint.yml`](.github/workflows/actionlint.yml) | Workflow syntax and expressions, plus ShellCheck on `run:` blocks |
-| [`zizmor.yml`](.github/workflows/zizmor.yml) | Workflow security: injection, permissions, credentials, pinning. Configured in [`.github/zizmor.yml`](.github/zizmor.yml) |
+| [`zizmor.yml`](.github/workflows/zizmor.yml) | Workflow security: injection, permissions, credentials, pinning. Configured in [`.github/zizmor.yml`](.github/zizmor.yml). Findings go to code scanning (the **Security** tab) and block the merge from there instead of failing the job |
 | [`shell.yml`](.github/workflows/shell.yml) | ShellCheck and shfmt on all `*.sh` files, and the aggregator regression tests |
 
 - **Shell formatting** follows [Google's shell style guide](https://google.github.io/styleguide/shellguide.html).
